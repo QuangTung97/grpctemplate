@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package lib.v1;
+
+option go_package = "grpctemplate/rpc/lib/v1;lib";
+
+enum CampaignType {
+  CAMPAIGN_TYPE_UNSPECIFIED = 0;
+  CAMPAIGN_TYPE_MERCHANT = 1;
+  CAMPAIGN_TYPE_BANK = 2;
+  CAMPAIGN_TYPE_PRIVATE = 3;
+}
