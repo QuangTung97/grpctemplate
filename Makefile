@@ -5,7 +5,7 @@ RPC_DIR := rpc
 
 CURRENT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-GOOGLE_API_PATH := /home/teko/go/pkg/mod/github.com/grpc-ecosystem/grpc-gateway@v1.14.8/third_party/googleapis/
+GOOGLE_API_PATH := ${GOPATH}/pkg/mod/github.com/grpc-ecosystem/grpc-gateway@v1.14.8/third_party/googleapis/
 
 define generate
 	mkdir -p ${RPC_DIR}/$(1) && \
@@ -24,3 +24,8 @@ gen:
 	rm -rf rpc
 	$(call generate,lib/v1/,enum_campaign_type.proto)
 	$(call generate,backend/v1/,backend.proto)
+
+install-tools:
+	go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
+	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
+	go install google.golang.org/protobuf/cmd/protoc-gen-go

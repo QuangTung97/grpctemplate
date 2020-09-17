@@ -4,8 +4,6 @@ package backend.v1;
 
 option go_package = "grpctemplate/rpc/backend/v1;backend";
 
-import "google/api/annotations.proto";
-
 import "google/protobuf/timestamp.proto";
 import "lib/v1/enum_campaign_type.proto";
 
@@ -18,10 +16,5 @@ message HelloResponse {
 }
 
 service Hello {
-  rpc Hello (HelloRequest) returns (HelloResponse) {
-    option (google.api.http) = {
-      post: "/api/v1/hello"
-      body: "*"
-    };
-  }
+  rpc Hello (HelloRequest) returns (HelloResponse);
 }
