@@ -1,8 +1,9 @@
 package main
 
 import (
-	"grpctemplate/rpc/backend/v1"
-	"grpctemplate/service/backend"
+	"grpctemplate/domain/backend"
+	backend_rpc "grpctemplate/rpc/backend/v1"
+	backend_service "grpctemplate/service/backend"
 	"net"
 
 	"google.golang.org/grpc"
@@ -11,13 +12,13 @@ import (
 func main() {
 	server := grpc.NewServer()
 
-	s := backend_service.NewService()
+	port := backend.NewPort()
 
-	service := &backend.HelloService{
+	s := backend_service.NewService(port)
+
+	backend_rpc.RegisterHelloService(server, &backend_rpc.HelloService{
 		Hello: s.Hello,
-	}
-
-	backend.RegisterHelloService(server, service)
+	})
 
 	lis, err := net.Listen("tcp", ":5000")
 	if err != nil {

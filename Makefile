@@ -26,6 +26,16 @@ gen:
 	$(call generate,backend/v1/,backend.proto)
 
 install-tools:
+	go install github.com/fzipp/gocyclo
 	go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
+	go install github.com/kisielk/errcheck
+	go install golang.org/x/lint/golint
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 	go install google.golang.org/protobuf/cmd/protoc-gen-go
+
+lint:
+	go fmt
+	golint ./...
+	go vet ./...
+	errcheck ./...
+	gocyclo -over 12 .
