@@ -19,6 +19,7 @@ endef
 
 all:
 	go build -o server cmd/server/main.go
+	go build -o client cmd/client/main.go
 
 gen:
 	rm -rf rpc
@@ -35,7 +36,7 @@ install-tools:
 
 lint:
 	go fmt
-	golint ./...
+	golint -set_exit_status ./...
 	go vet ./...
 	errcheck ./...
 	gocyclo -over 12 .

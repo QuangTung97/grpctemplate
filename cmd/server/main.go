@@ -4,13 +4,18 @@ import (
 	"grpctemplate/domain/backend"
 	backend_rpc "grpctemplate/rpc/backend/v1"
 	backend_service "grpctemplate/service/backend"
+	"grpctemplate/service/interceptors"
 	"net"
 
 	"google.golang.org/grpc"
 )
 
 func main() {
-	server := grpc.NewServer()
+	server := grpc.NewServer(
+		grpc.ChainUnaryInterceptor(
+			interceptors.DomainErrorUnaryInterceptor(),
+		),
+	)
 
 	port := backend.NewPort()
 
