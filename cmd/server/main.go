@@ -1,11 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"grpctemplate/domain/backend"
 	backend_rpc "grpctemplate/rpc/backend/v1"
 	backend_service "grpctemplate/service/backend"
 	"grpctemplate/service/interceptors"
+	"log"
 	"net"
+	"os"
+	"os/signal"
+	"sync"
 
 	"google.golang.org/grpc"
 )
@@ -16,6 +21,9 @@ func main() {
 			interceptors.DomainErrorUnaryInterceptor(),
 		),
 	)
+
+	exit := make(chan os.Signal, 1)
+	signal.Notify(exit, os.Interrupt, os.Kill)
 
 	port := backend.NewPort()
 
@@ -30,6 +38,22 @@ func main() {
 		panic(err)
 	}
 
-	err = server.Serve(lis)
-	panic(err)
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	go func() {
+		defer wg.Done()
+
+		err = server.Serve(lis)
+		if err != nil {
+			log.Println("[ERROR]", err)
+		}
+	}()
+
+	signal := <-exit
+	fmt.Println("SIGNAL", signal)
+	server.GracefulStop()
+	wg.Wait()
+
+	fmt.Println("Stop successfully")
 }

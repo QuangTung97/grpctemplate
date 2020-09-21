@@ -1,7 +1,7 @@
 package errors
 
-// ErrInvalidCampaignType 0301
+// ErrInvalidCampaignType 03001
 var ErrInvalidCampaignType = NewError("03001", "Invalid campaign type")
 
-// ErrInvalidTime 0302
+// ErrInvalidTime 03002
 var ErrInvalidTime = NewError("03002", "Invalid time")

@@ -2,11 +2,14 @@ package backend
 
 import (
 	"context"
+	"fmt"
 	domain "grpctemplate/domain/backend"
 	rpc "grpctemplate/rpc/backend/v1"
+	"time"
+
+	"grpctemplate/domain/errors"
 
 	"github.com/golang/protobuf/ptypes"
-	"grpctemplate/domain/errors"
 )
 
 // Service for gRPC
@@ -42,6 +45,9 @@ func (s *Service) Hello(ctx context.Context, req *rpc.HelloRequest,
 	if err != nil {
 		return nil, err
 	}
+
+	time.Sleep(10 * time.Second)
+	fmt.Println("Sleep completed")
 
 	return &rpc.HelloResponse{}, nil
 }
