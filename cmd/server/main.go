@@ -26,16 +26,22 @@ import (
 func initServer(logger *zap.Logger) *grpc.Server {
 	grpc_zap.ReplaceGrpcLoggerV2(logger)
 
+	decider := func(ctx context.Context, fullMethodName string, servingObject interface{}) bool {
+		return true
+	}
+
 	server := grpc.NewServer(
 		grpc.ChainUnaryInterceptor(
 			grpc_ctxtags.UnaryServerInterceptor(),
 			grpc_zap.UnaryServerInterceptor(logger),
+			grpc_zap.PayloadUnaryServerInterceptor(logger, decider),
 			grpc_prometheus.UnaryServerInterceptor,
 			interceptors.DomainErrorUnaryInterceptor(),
 		),
 		grpc.ChainStreamInterceptor(
 			grpc_ctxtags.StreamServerInterceptor(),
 			grpc_zap.StreamServerInterceptor(logger),
+			grpc_zap.PayloadStreamServerInterceptor(logger, decider),
 			grpc_prometheus.StreamServerInterceptor,
 		),
 	)
@@ -44,9 +50,7 @@ func initServer(logger *zap.Logger) *grpc.Server {
 
 	s := backend_service.NewService(port)
 
-	backend_rpc.RegisterHelloService(server, &backend_rpc.HelloService{
-		Hello: s.Hello,
-	})
+	backend_rpc.RegisterHelloServer(server, s)
 
 	grpc_prometheus.Register(server)
 	grpc_prometheus.EnableHandlingTimeHistogram()

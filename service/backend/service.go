@@ -18,6 +18,8 @@ type Service struct {
 	port domain.IPort
 }
 
+var _ rpc.HelloServer = &Service{}
+
 // NewService create a new Service
 func NewService(port domain.IPort) *Service {
 	return &Service{
