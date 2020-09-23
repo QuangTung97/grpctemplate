@@ -5,6 +5,7 @@ import (
 	"grpctemplate/domain/errors"
 	"strconv"
 
+	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -23,6 +24,10 @@ func DomainErrorUnaryInterceptor() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{},
 		info *grpc.UnaryServerInfo, handler grpc.UnaryHandler,
 	) (resp interface{}, err error) {
+		tags := grpc_ctxtags.Extract(ctx)
+		tags = tags.Set("user.id", 111222)
+		ctx = grpc_ctxtags.SetInContext(ctx, tags)
+
 		res, err := handler(ctx, req)
 
 		if err != nil {

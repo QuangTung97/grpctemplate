@@ -1,3 +1,4 @@
 /rpc
 /server
 /client
+/server.*.log

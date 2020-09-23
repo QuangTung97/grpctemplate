@@ -2,7 +2,6 @@ package backend
 
 import (
 	"context"
-	"fmt"
 	domain "grpctemplate/domain/backend"
 	rpc "grpctemplate/rpc/backend/v1"
 	"time"
@@ -10,6 +9,8 @@ import (
 	"grpctemplate/domain/errors"
 
 	"github.com/golang/protobuf/ptypes"
+	"github.com/grpc-ecosystem/go-grpc-middleware/logging/zap/ctxzap"
+	"go.uber.org/zap"
 )
 
 // Service for gRPC
@@ -50,7 +51,7 @@ func (s *Service) Hello(ctx context.Context, req *rpc.HelloRequest,
 	defer cancel()
 
 	<-ctx.Done()
-	fmt.Println(ctx.Err())
+	ctxzap.Extract(ctx).Info("context.Done", zap.Error(ctx.Err()))
 
 	return &rpc.HelloResponse{}, nil
 }

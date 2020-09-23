@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
+	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	"github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
@@ -27,11 +28,13 @@ func initServer(logger *zap.Logger) *grpc.Server {
 
 	server := grpc.NewServer(
 		grpc.ChainUnaryInterceptor(
+			grpc_ctxtags.UnaryServerInterceptor(),
 			grpc_zap.UnaryServerInterceptor(logger),
 			grpc_prometheus.UnaryServerInterceptor,
 			interceptors.DomainErrorUnaryInterceptor(),
 		),
 		grpc.ChainStreamInterceptor(
+			grpc_ctxtags.StreamServerInterceptor(),
 			grpc_zap.StreamServerInterceptor(logger),
 			grpc_prometheus.StreamServerInterceptor,
 		),
