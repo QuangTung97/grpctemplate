@@ -46,8 +46,11 @@ func (s *Service) Hello(ctx context.Context, req *rpc.HelloRequest,
 		return nil, err
 	}
 
-	time.Sleep(10 * time.Second)
-	fmt.Println("Sleep completed")
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+
+	<-ctx.Done()
+	fmt.Println(ctx.Err())
 
 	return &rpc.HelloResponse{}, nil
 }
