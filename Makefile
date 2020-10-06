@@ -12,7 +12,7 @@ define generate
 		cd ${PROTO_DIR}/$(1) && \
 		protoc -I.:${CURRENT_DIR}/${PROTO_DIR}:${GOOGLE_API_PATH} \
 			--go_out=paths=source_relative:${CURRENT_DIR}/${RPC_DIR}/$(1) \
-			--go-grpc_out=require_unimplemented_servers=false,paths=source_relative:${CURRENT_DIR}/${RPC_DIR}/$(1) \
+			--go-grpc_out=paths=source_relative:${CURRENT_DIR}/${RPC_DIR}/$(1) \
 			--grpc-gateway_out=logtostderr=true,paths=source_relative:${CURRENT_DIR}/${RPC_DIR}/$(1) \
 			$(2)
 endef

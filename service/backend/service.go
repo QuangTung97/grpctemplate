@@ -15,6 +15,7 @@ import (
 
 // Service for gRPC
 type Service struct {
+	rpc.UnsafeHelloServer
 	port domain.IPort
 }
 
