@@ -5,7 +5,9 @@ RPC_DIR := rpc
 
 CURRENT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-GOOGLE_API_PATH := ${GOPATH}/pkg/mod/github.com/grpc-ecosystem/grpc-gateway@v1.14.8/third_party/googleapis/
+GRPC_GATEWAY := $(shell go list -m -f "{{.Dir}}" github.com/grpc-ecosystem/grpc-gateway)
+
+GOOGLE_API_PATH := ${GRPC_GATEWAY}/third_party/googleapis/
 
 define generate
 	mkdir -p ${RPC_DIR}/$(1) && \

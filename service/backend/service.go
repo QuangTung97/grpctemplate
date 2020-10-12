@@ -58,3 +58,11 @@ func (s *Service) Hello(ctx context.Context, req *rpc.HelloRequest,
 
 	return &rpc.HelloResponse{}, nil
 }
+
+func (s *Service) Get(ctx context.Context, req *rpc.GetRequest,
+) (*rpc.GetResponse, error) {
+	createdAt := ptypes.TimestampNow()
+	return &rpc.GetResponse{
+		CreatedAt: createdAt,
+	}, nil
+}

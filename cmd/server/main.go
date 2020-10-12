@@ -17,6 +17,7 @@ import (
 	"github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	"github.com/grpc-ecosystem/go-grpc-prometheus"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
 
@@ -55,6 +56,14 @@ func initServer(logger *zap.Logger) *grpc.Server {
 	grpc_prometheus.Register(server)
 	grpc_prometheus.EnableHandlingTimeHistogram()
 
+	mux := runtime.NewServeMux(
+		runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{OrigName: true}),
+	)
+	ctx := context.Background()
+	opts := []grpc.DialOption{grpc.WithInsecure()}
+	backend_rpc.RegisterHelloHandlerFromEndpoint(ctx, mux, "localhost:5000", opts)
+
+	http.Handle("/api/", mux)
 	http.Handle("/metrics", promhttp.Handler())
 
 	return server
