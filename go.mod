@@ -5,6 +5,7 @@ go 1.14
 require (
 	github.com/fzipp/gocyclo v0.0.0-20150627053110-6acd4345c835
 	github.com/golang/protobuf v1.4.2
+	github.com/google/uuid v1.1.2
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/grpc-ecosystem/grpc-gateway v1.15.0

@@ -2,12 +2,14 @@ package main
 
 import (
 	"context"
+	"fmt"
 	backend_rpc "grpctemplate/rpc/backend/v1"
 	lib_rpc "grpctemplate/rpc/lib/v1"
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/status"
 )
 
 func main() {
@@ -32,6 +34,11 @@ func main() {
 
 	_, err = client.Hello(ctx, req)
 	if err != nil {
+		st, ok := status.FromError(err)
+		if ok {
+			fmt.Println("Code:", st.Code())
+			fmt.Println("Message:", st.Message())
+		}
 		panic(err)
 	}
 }
